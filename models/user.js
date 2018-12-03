@@ -17,4 +17,9 @@ userSchema.set('toJSON', {
   }
 });
 
+userSchema.methods.validatePassword = function(incommingPassword) {
+  const user = this;
+  return incommingPassword === user.password;
+};
+
 module.exports = mongoose.model('User', userSchema);
