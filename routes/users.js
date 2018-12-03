@@ -9,7 +9,40 @@ router.post('/', (req, res, next) => {
   requiredFields.forEach(field => {
     if (!(field in req.body)) {
       const err = new Error(`Missing \`${field}\` in request body`);
-      err.status = 400;
+      err.status = 422;
+      return next(err);
+    }
+  });
+  const stringFields = ['fullname', 'username', 'password'];
+  stringFields.forEach(field => {
+    if (field in req.body && typeof req.body[field] !== 'string') {
+      const err = new Error(`Incorrect field type for \`${field}\`: expected string`);
+      err.status = 422;
+      return next(err);
+    }
+  });
+  const trimmedFields = ['username', 'password'];
+  trimmedFields.forEach(field => {
+    if (req.body[field].trim() !== req.body[field]) {
+      const err = new Error(`Cannot start or end \`${field}\` with whitespace`);
+      err.status = 422;
+      return next(err);
+    }
+  });
+  const sizedFields = {
+    username: {min: 1},
+    password: {min: 8, max: 72}
+  };
+  Object.keys(sizedFields).forEach(field => {
+    let err;
+    if ('min' in sizedFields[field] && req.body[field].length < sizedFields[field].min) {
+      err = new Error(`\`${field}\` must be at least ${sizedFields[field].min} characters`);
+    } else if ('max' in sizedFields[field] && req.body[field].length > sizedFields[field].max) {
+      err = new Error(`\`${field}\` must be at most ${sizedFields[field].maz} characters`);
+    }
+    if (err) {
+      err.status = 422;
+      return next(err);
     }
   });
   const {fullname, username, password} = req.body;
