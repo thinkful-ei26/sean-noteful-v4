@@ -7,6 +7,7 @@ const passport = require('passport');
 
 const { PORT, MONGODB_URI } = require('./config');
 const localStrategy = require('./passport/local');
+const jwtStrategy = require('./passport/jwt');
 
 const notesRouter = require('./routes/notes');
 const foldersRouter = require('./routes/folders');
@@ -23,6 +24,7 @@ app.use(morgan(process.env.NODE_ENV === 'development' ? 'dev' : 'common', {
 }));
 
 passport.use(localStrategy);
+passport.use(jwtStrategy);
 
 // Create a static webserver
 app.use(express.static('public'));
