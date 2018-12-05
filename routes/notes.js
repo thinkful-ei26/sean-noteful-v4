@@ -5,6 +5,8 @@ const mongoose = require('mongoose');
 const passport = require('passport');
 
 const Note = require('../models/note');
+const Folder = require('../models/folder');
+const Tag = require('../models/tag');
 
 const router = express.Router();
 
@@ -84,14 +86,48 @@ router.post('/', (req, res, next) => {
     err.status = 400;
     return next(err);
   }
+  if (folderId) {
+    Folder.findOne({_id: folderId, userId})
+      .then(folder => {
+        if (!folder) {
+          const err = new Error('The `folderId` is not valid');
+          err.status = 400;
+          return next(err);
+        }
+      })
+      .catch(err => next(err));
+  }
 
   if (tags) {
-    const badIds = tags.filter((tag) => !mongoose.Types.ObjectId.isValid(tag));
-    if (badIds.length) {
-      const err = new Error('The `tags` array contains an invalid `id`');
+    // const badIds = tags.filter((tag) => !mongoose.Types.ObjectId.isValid(tag));
+    // if (badIds.length) {
+    //   const err = new Error('The `tags` array contains an invalid `id`');
+    //   err.status = 400;
+    //   return next(err);
+    // }
+    if (!Array.isArray(tags)) {
+      const err = new Error('The `tags` property must be an array');
       err.status = 400;
       return next(err);
     }
+    tags.forEach(tagId => {
+      if (mongoose.Types.ObjectId.isValid(tagId)) {
+        Tag.findOne({_id: tagId, userId})
+          .then(tag => {
+            if (!tag) {
+              const err = new Error('The `tags` array contains an invalid `id`');
+              err.status = 400;
+              return next(err);
+            }
+          })
+          .catch(err => next(err));
+      } else {
+        // if this block runs, tagId is not a valid mongoose id
+        const err = new Error('The `tags` array contains an invalid `id`');
+        err.status = 400;
+        return next(err);
+      }
+    });
   }
 
   const newNote = { title, content, folderId, tags, userId };
@@ -140,14 +176,50 @@ router.put('/:id', (req, res, next) => {
     err.status = 400;
     return next(err);
   }
+  if (toUpdate.folderId) {
+    Folder.findOne({_id: toUpdate.folderId, userId})
+      .then(folder => {
+        if (!folder) {
+          const err = new Error('The `folderId` is not valid');
+          err.status = 400;
+          return next(err);
+        }
+      })
+      .catch(err => next(err));
+  }
 
   if (toUpdate.tags) {
-    const badIds = toUpdate.tags.filter((tag) => !mongoose.Types.ObjectId.isValid(tag));
-    if (badIds.length) {
-      const err = new Error('The `tags` array contains an invalid `id`');
+    if (!Array.isArray(toUpdate.tags)) {
+      const err = new Error('The `tags` property must be an array');
       err.status = 400;
       return next(err);
     }
+    // const badIds = toUpdate.tags.filter((tag) => !mongoose.Types.ObjectId.isValid(tag));
+    toUpdate.tags.forEach(tagId => {
+      if (mongoose.Types.ObjectId.isValid(tagId)) {
+        Tag.findOne({_id: tagId, userId})
+          .then(tag => {
+            // if (!tag) badIds.push(tagId); <- this doesn't work because Tag.findOne is asyncronous
+            if (!tag) {
+              const err = new Error('The `tags` array contains an invalid `id`');
+              err.status = 400;
+              return next(err);
+            }
+          })
+          .catch(err => next(err));
+      } else {
+        // if this block of code is called, the tagId was not a valid mongoose id
+        // badIds.push(tagId);
+        const err = new Error('The `tags` array contains an invalid `id`');
+        err.status = 400;
+        return next(err);
+      }
+    });
+    // if (badIds.length) {
+    //   const err = new Error('The `tags` array contains an invalid `id`');
+    //   err.status = 400;
+    //   return next(err);
+    // }
   }
 
   if (toUpdate.folderId === '') {
