@@ -38,7 +38,7 @@ router.post('/', (req, res, next) => {
     if ('min' in sizedFields[field] && req.body[field].length < sizedFields[field].min) {
       err = new Error(`\`${field}\` must be at least ${sizedFields[field].min} characters`);
     } else if ('max' in sizedFields[field] && req.body[field].length > sizedFields[field].max) {
-      err = new Error(`\`${field}\` must be at most ${sizedFields[field].maz} characters`);
+      err = new Error(`\`${field}\` must be at most ${sizedFields[field].max} characters`);
     }
     if (err) {
       err.status = 422;
@@ -46,7 +46,7 @@ router.post('/', (req, res, next) => {
     }
   });
   const {fullname, username, password} = req.body;
-  const newUser = {fullname, username};
+  const newUser = {fullname: fullname.trim(), username};
 
   return User.hashPassword(password)
     .then(digest => {

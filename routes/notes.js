@@ -92,7 +92,7 @@ router.post('/', (req, res, next) => {
         if (!folder) {
           const err = new Error('The `folderId` is not valid');
           err.status = 400;
-          return next(err);
+          return Promise.reject(err);
         }
       })
       .catch(err => next(err));
@@ -117,7 +117,7 @@ router.post('/', (req, res, next) => {
             if (!tag) {
               const err = new Error('The `tags` array contains an invalid `id`');
               err.status = 400;
-              return next(err);
+              return Promise.reject(err);
             }
           })
           .catch(err => next(err));
@@ -182,10 +182,13 @@ router.put('/:id', (req, res, next) => {
         if (!folder) {
           const err = new Error('The `folderId` is not valid');
           err.status = 400;
-          return next(err);
+          return Promise.reject(err);
         }
       })
       .catch(err => next(err));
+  } else {
+    delete toUpdate.folderId;
+    toUpdate.$unset = {folderId: 1};
   }
 
   if (toUpdate.tags) {
@@ -203,7 +206,7 @@ router.put('/:id', (req, res, next) => {
             if (!tag) {
               const err = new Error('The `tags` array contains an invalid `id`');
               err.status = 400;
-              return next(err);
+              return Promise.reject(err);
             }
           })
           .catch(err => next(err));
