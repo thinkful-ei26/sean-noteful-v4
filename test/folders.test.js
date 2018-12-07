@@ -88,9 +88,10 @@ describe('Noteful API - Folders', function () {
             expect(new Date(item.createdAt)).to.eql(data[i].createdAt);
             expect(new Date(item.updatedAt)).to.eql(data[i].updatedAt);
             // console.log(data[i].userId);
-            // expect(item.userId).to.equal(data[i].userId);
+            expect(item.userId).to.equal(data[i].userId.toString());
             // ^ error: expected '000000000000000000000001' to equal { Object (_bsontype, id) }
             // when logging data[i].userId to console, it is 000000000000000000000001
+            // using toString() fixes it
           });
         });
     });
@@ -126,7 +127,7 @@ describe('Noteful API - Folders', function () {
           expect(res.body.name).to.equal(data.name);
           expect(new Date(res.body.createdAt)).to.eql(data.createdAt);
           expect(new Date(res.body.updatedAt)).to.eql(data.updatedAt);
-          // expect(res.body.userId).to.equal(data.userId); same error as above
+          expect(res.body.userId).to.equal(data.userId.toString()); // same error as above
         });
     });
 
@@ -185,6 +186,7 @@ describe('Noteful API - Folders', function () {
           expect(body.name).to.equal(data.name);
           expect(new Date(body.createdAt)).to.eql(data.createdAt);
           expect(new Date(body.updatedAt)).to.eql(data.updatedAt);
+          expect(body.userId).to.equal(data.userId.toString());
         });
     });
 
@@ -262,6 +264,7 @@ describe('Noteful API - Folders', function () {
           expect(new Date(res.body.createdAt)).to.eql(data.createdAt);
           // expect item to have been updated
           expect(new Date(res.body.updatedAt)).to.greaterThan(data.updatedAt);
+          expect(res.body.userId).to.equal(data.userId.toString());
         });
     });
 

@@ -93,6 +93,7 @@ describe('Noteful API - Notes', function () {
             expect(item.content).to.equal(data[i].content);
             expect(new Date(item.createdAt)).to.eql(data[i].createdAt);
             expect(new Date(item.updatedAt)).to.eql(data[i].updatedAt);
+            expect(item.userId).to.equal(data[i].userId.toString());
           });
         });
     });
@@ -123,6 +124,7 @@ describe('Noteful API - Notes', function () {
             expect(item.content).to.equal(data[i].content);
             expect(new Date(item.createdAt)).to.eql(data[i].createdAt);
             expect(new Date(item.updatedAt)).to.eql(data[i].updatedAt);
+            expect(item.userId).to.equal(data[i].userId.toString());
           });
         });
     });
@@ -149,6 +151,7 @@ describe('Noteful API - Notes', function () {
             expect(item.content).to.equal(data[i].content);
             expect(new Date(item.createdAt)).to.eql(data[i].createdAt);
             expect(new Date(item.updatedAt)).to.eql(data[i].updatedAt);
+            expect(item.userId).to.equal(data[i].userId.toString());
           });
         });
     });
@@ -240,6 +243,7 @@ describe('Noteful API - Notes', function () {
           expect(res.body.content).to.equal(data.content);
           expect(new Date(res.body.createdAt)).to.eql(data.createdAt);
           expect(new Date(res.body.updatedAt)).to.eql(data.updatedAt);
+          expect(res.body.userId).to.equal(data.userId.toString());
         });
     });
 
@@ -300,6 +304,7 @@ describe('Noteful API - Notes', function () {
           expect(res.body.content).to.equal(data.content);
           expect(new Date(res.body.createdAt)).to.eql(data.createdAt);
           expect(new Date(res.body.updatedAt)).to.eql(data.updatedAt);
+          expect(res.body.userId).to.equal(data.userId.toString());
         });
     });
 
@@ -325,6 +330,7 @@ describe('Noteful API - Notes', function () {
           expect(res.body.content).to.not.exist;
           expect(new Date(res.body.createdAt)).to.eql(data.createdAt);
           expect(new Date(res.body.updatedAt)).to.eql(data.updatedAt);
+          expect(res.body.userId).to.equal(data.userId.toString());
         });
     });
 
@@ -351,6 +357,7 @@ describe('Noteful API - Notes', function () {
           expect(res.body.folderId).to.not.exist;
           expect(new Date(res.body.createdAt)).to.eql(data.createdAt);
           expect(new Date(res.body.updatedAt)).to.eql(data.updatedAt);
+          expect(res.body.userId).to.equal(data.userId.toString());
         });
     });
 
@@ -457,6 +464,7 @@ describe('Noteful API - Notes', function () {
           expect(new Date(res.body.createdAt)).to.eql(data.createdAt);
           // expect note to have been updated
           expect(new Date(res.body.updatedAt)).to.greaterThan(data.updatedAt);
+          expect(res.body.userId).to.equal(data.userId.toString());
         });
     });
 
@@ -483,6 +491,7 @@ describe('Noteful API - Notes', function () {
           expect(new Date(res.body.createdAt)).to.eql(data.createdAt);
           // expect note to have been updated
           expect(new Date(res.body.updatedAt)).to.greaterThan(data.updatedAt);
+          expect(res.body.userId).to.equal(data.userId.toString());
         });
     });
 
@@ -507,11 +516,12 @@ describe('Noteful API - Notes', function () {
           expect(res.body.id).to.equal(data.id);
           expect(res.body.title).to.equal(data.title);
           expect(res.body.content).to.equal(data.content);
-          // expect(res.body.folderId).to.equal(updateItem.folderId);
+          expect(res.body.folderId).to.equal(updateItem.folderId);
           expect(res.body.tags).to.deep.equal(data.tags);
           expect(new Date(res.body.createdAt)).to.eql(data.createdAt);
           // expect note to have been updated
           expect(new Date(res.body.updatedAt)).to.greaterThan(data.updatedAt);
+          expect(res.body.userId).to.equal(data.userId.toString());
         });
     });
 
@@ -543,6 +553,7 @@ describe('Noteful API - Notes', function () {
           expect(new Date(res.body.createdAt)).to.eql(data.createdAt);
           // expect note to have been updated
           expect(new Date(res.body.updatedAt)).to.greaterThan(data.updatedAt);
+          expect(res.body.userId).to.equal(data.userId.toString());
         });
     });
 
@@ -626,6 +637,7 @@ describe('Noteful API - Notes', function () {
           expect(new Date(res.body.createdAt)).to.eql(data.createdAt);
           // expect note to have been updated
           expect(new Date(res.body.updatedAt)).to.greaterThan(data.updatedAt);
+          expect(res.body.userId).to.equal(data.userId.toString());
         });
     });
 

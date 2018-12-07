@@ -87,6 +87,7 @@ describe('Noteful API - Tags', function () {
             expect(item.name).to.equal(data[i].name);
             expect(new Date(item.createdAt)).to.eql(data[i].createdAt);
             expect(new Date(item.updatedAt)).to.eql(data[i].updatedAt);
+            expect(item.userId).to.equal(data[i].userId.toString());
           });
         });
     });
@@ -123,6 +124,7 @@ describe('Noteful API - Tags', function () {
           expect(res.body.name).to.equal(data.name);
           expect(new Date(res.body.createdAt)).to.eql(data.createdAt);
           expect(new Date(res.body.updatedAt)).to.eql(data.updatedAt);
+          expect(res.body.userId).to.equal(data.userId.toString());
         });
     });
 
@@ -179,6 +181,7 @@ describe('Noteful API - Tags', function () {
           expect(body.name).to.equal(data.name);
           expect(new Date(body.createdAt)).to.eql(data.createdAt);
           expect(new Date(body.updatedAt)).to.eql(data.updatedAt);
+          expect(body.userId).to.equal(data.userId.toString());
         });
     });
 
@@ -253,6 +256,7 @@ describe('Noteful API - Tags', function () {
           expect(new Date(res.body.createdAt)).to.eql(data.createdAt);
           // expect item to have been updated
           expect(new Date(res.body.updatedAt)).to.greaterThan(data.updatedAt);
+          expect(res.body.userId).to.equal(data.userId.toString());
         });
     });
 
